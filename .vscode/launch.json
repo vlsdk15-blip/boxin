@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "boxin (web)",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "edge",
+      "toolArgs": ["--dart-define-from-file=.env"]
+    },
+    {
+      "name": "boxin (device)",
+      "request": "launch",
+      "type": "dart",
+      "toolArgs": ["--dart-define-from-file=.env"]
+    }
+  ]
+}

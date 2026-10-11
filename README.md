@@ -51,12 +51,11 @@ test/
 
 ### 2. 처음 한 번만
 
-`android/`, `ios/`, `web/` 플랫폼 폴더는 아직 저장소에 없습니다. Flutter 설치 후 프로젝트 폴더에서 한 번 생성합니다.
-
 ```bash
-flutter create --org com.boxin --project-name boxin --platforms=android,ios,web .
 flutter pub get
 ```
+
+`.env` 파일이 없으면 실행이 실패하므로 아래 3번을 먼저 진행합니다.
 
 ### 3. Supabase 연결
 
@@ -72,10 +71,13 @@ supabase db push
 ### 4. 앱 실행
 
 ```bash
-flutter run -d chrome --dart-define-from-file=.env    # 웹
+flutter run -d edge --dart-define-from-file=.env      # 웹 (Chrome이 있으면 -d chrome)
 flutter run --dart-define-from-file=.env              # 연결된 기기·에뮬레이터
 flutter test
 ```
+
+VS Code에서는 실행 및 디버그(F5)에서 `boxin (web)` 또는 `boxin (device)`를 고르면 같은 설정으로 실행됩니다.
+Android 앱 빌드에는 Android Studio(Android SDK), iOS 앱 빌드에는 Mac과 Xcode가 필요합니다.
 
 ## DB 구조 (v0.1)
 
@@ -105,6 +107,7 @@ flutter test
 ### v0.1.0 — 2026-10-11
 
 - Flutter 프로젝트 뼈대 (`lib/`, 라우터, `/kiosk` 주소, Supabase 초기화)
+- Android·iOS·웹 플랫폼 폴더 생성 (앱 ID `com.boxin.boxin`), VS Code 실행 설정
 - MVP DB 스키마: 테이블 13개, 센터별 RLS 정책
 - 가입 시 프로필 자동 생성·전화번호 연결 트리거, 수업 예약 수 자동 집계 트리거
 - 서버 함수 `create_center`(센터 생성), `register_member`(코치가 회원 등록)
