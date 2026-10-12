@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../data/centers_repository.dart';
 import '../../data/supabase.dart';
+import 'member_passes_sheet.dart';
 
 /// Coach / admin: everyone in the center, and registering a new member.
 class MembersScreen extends ConsumerWidget {
@@ -45,6 +46,12 @@ class MembersScreen extends ConsumerWidget {
                   title: Text(m.name.isEmpty ? '(이름 없음)' : m.name),
                   subtitle: details.isEmpty ? null : Text(details),
                   trailing: m.role == MemberRole.member ? null : Chip(label: Text(m.role.label)),
+                  onTap: () => showModalBottomSheet<void>(
+                    context: context,
+                    showDragHandle: true,
+                    isScrollControlled: true,
+                    builder: (_) => MemberPassesSheet(centerId: centerId, member: m),
+                  ),
                 );
               },
             ),

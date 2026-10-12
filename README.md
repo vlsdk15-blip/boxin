@@ -3,7 +3,7 @@
 여러 크로스핏·하이록스 센터가 함께 쓰는 **출석·예약·회원권 관리 앱**입니다.
 Flutter 코드 하나로 iOS, Android, 웹(PC)에 동시에 내놓습니다.
 
-- 현재 버전: **v0.4.0** (수업 시간표, 예약·대기)
+- 현재 버전: **v0.5.0** (회원권 상품, 현장 판매, 내 회원권)
 - 설계서: https://claude.ai/code/artifact/2aea7b9f-a71f-474e-a6f4-6095bec74ec6
 
 ## 사용자
@@ -36,7 +36,7 @@ lib/
   app.dart               라우터, 테마
   config/env.dart        빌드 시 주입되는 설정
   data/                  Supabase 조회·호출
-  features/              화면별 코드 (auth, centers, members, classes, home, kiosk)
+  features/              화면별 코드 (auth, centers, members, classes, passes, home, kiosk)
 supabase/
   config.toml            로컬 개발용 Supabase 설정
   migrations/            DB 스키마 (SQL)
@@ -118,6 +118,12 @@ Android 앱 빌드에는 Android Studio(Android SDK), iOS 앱 빌드에는 Mac�
 
 ## 변경 이력
 
+### v0.5.0 — 2026-10-12
+
+- 회원권 상품 화면(관리자): 기간제·횟수제 상품 추가, 판매 중지
+- 회원 관리에서 회원을 누르면 보유 회원권 확인과 현장 판매(회원권 발급 + 결제 기록을 한 번에)
+- 센터 홈에 "내 회원권" 표시(종료일, 남은 횟수)
+- DB: 판매 함수 `sell_pass` (종료일·횟수는 상품 기준으로 서버가 계산)
 ### v0.4.0 — 2026-10-12
 
 - 수업 시간표 화면: 다가오는 수업을 날짜별로 표시, 남은 자리 실시간 반영
@@ -148,6 +154,6 @@ Android 앱 빌드에는 Android Studio(Android SDK), iOS 앱 빌드에는 Mac�
 
 ### 다음 버전 예정
 
-- 회원권 상품·판매, 내 회원권 화면
+- 일시정지 요청·승인, 회원권 만료 알림(pg_cron)
 - 출석 함수(앱·위치·키오스크 공통), 키오스크 화면
 - 회원권 만료 알림(pg_cron), PortOne 테스트 결제

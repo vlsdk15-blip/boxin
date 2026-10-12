@@ -148,6 +148,7 @@ Future<void> updateCenter(
 class CenterMember {
   const CenterMember({
     required this.membershipId,
+    required this.profileId,
     required this.name,
     this.phone,
     required this.role,
@@ -156,6 +157,7 @@ class CenterMember {
   });
 
   final String membershipId;
+  final String profileId;
   final String name;
   final String? phone;
   final MemberRole role;
@@ -168,6 +170,7 @@ class CenterMember {
     final profile = json['profiles'] as Map<String, dynamic>;
     return CenterMember(
       membershipId: json['id'] as String,
+      profileId: json['profile_id'] as String,
       name: profile['name'] as String? ?? '',
       phone: profile['phone'] as String?,
       role: MemberRole.values.byName(json['role'] as String),
@@ -182,7 +185,7 @@ final centerMembersProvider =
     FutureProvider.autoDispose.family<List<CenterMember>, String>((ref, centerId) async {
   final rows = await supabase
       .from('memberships')
-      .select('id, role, member_no, profiles(name, phone, user_id)')
+      .select('id, profile_id, role, member_no, profiles(name, phone, user_id)')
       .eq('center_id', centerId)
       .eq('is_active', true)
       .order('created_at');

@@ -9,6 +9,7 @@ import 'features/auth/login_screen.dart';
 import 'features/centers/center_settings_screen.dart';
 import 'features/centers/centers_screen.dart';
 import 'features/members/members_screen.dart';
+import 'features/passes/pass_products_screen.dart';
 import 'features/classes/schedule_screen.dart';
 import 'features/home/home_screen.dart';
 import 'features/kiosk/kiosk_screen.dart';
@@ -36,6 +37,11 @@ final _routerProvider = Provider<GoRouter>((ref) {
         path: '/center/:centerId/schedule',
         builder: (context, state) =>
             ScheduleScreen(centerId: state.pathParameters['centerId']!),
+      ),
+      GoRoute(
+        path: '/center/:centerId/products',
+        builder: (context, state) =>
+            PassProductsScreen(centerId: state.pathParameters['centerId']!),
       ),
       GoRoute(
         path: '/center/:centerId/members',
