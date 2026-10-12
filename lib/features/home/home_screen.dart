@@ -35,6 +35,13 @@ class HomeScreen extends ConsumerWidget {
                   ? const Text('이 센터의 회원이 아닙니다.')
                   : ListView(
                       children: [
+                        ListTile(
+                          leading: const Icon(Icons.calendar_month),
+                          title: const Text('수업 시간표'),
+                          subtitle: const Text('수업 예약, 남은 자리'),
+                          trailing: const Icon(Icons.chevron_right),
+                          onTap: () => context.go('/center/$centerId/schedule'),
+                        ),
                         if (center.role != MemberRole.member)
                           ListTile(
                             leading: const Icon(Icons.groups),
@@ -53,7 +60,7 @@ class HomeScreen extends ConsumerWidget {
                           ),
                         const Padding(
                           padding: EdgeInsets.all(24),
-                          child: Text('수업 예약과 출석은 준비 중입니다.', textAlign: TextAlign.center),
+                          child: Text('출석과 회원권은 준비 중입니다.', textAlign: TextAlign.center),
                         ),
                       ],
                     ),

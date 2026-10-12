@@ -1,7 +1,7 @@
 name: boxin
 description: "박스인(BoxIn) - 크로스핏·하이록스 센터 출석·예약·회원권 관리 앱"
 publish_to: 'none'
-version: 0.3.0+3
+version: 0.4.0+4
 
 environment:
   sdk: ^3.5.0

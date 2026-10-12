@@ -3,7 +3,7 @@
 여러 크로스핏·하이록스 센터가 함께 쓰는 **출석·예약·회원권 관리 앱**입니다.
 Flutter 코드 하나로 iOS, Android, 웹(PC)에 동시에 내놓습니다.
 
-- 현재 버전: **v0.3.0** (센터 설정, 회원 관리)
+- 현재 버전: **v0.4.0** (수업 시간표, 예약·대기)
 - 설계서: https://claude.ai/code/artifact/2aea7b9f-a71f-474e-a6f4-6095bec74ec6
 
 ## 사용자
@@ -36,7 +36,7 @@ lib/
   app.dart               라우터, 테마
   config/env.dart        빌드 시 주입되는 설정
   data/                  Supabase 조회·호출
-  features/              화면별 코드 (auth, centers, members, home, kiosk)
+  features/              화면별 코드 (auth, centers, members, classes, home, kiosk)
 supabase/
   config.toml            로컬 개발용 Supabase 설정
   migrations/            DB 스키마 (SQL)
@@ -114,10 +114,17 @@ Android 앱 빌드에는 Android Studio(Android SDK), iOS 앱 빌드에는 Mac�
 | `product_transfers` | 지점 간 회원권 상품 전달 |
 
 모든 센터 데이터에는 `center_id`가 있고, RLS로 자기 센터 데이터만 보입니다.
-회원이 직접 하는 출석·예약·결제는 서버 함수로만 처리할 예정이라 v0.1에서는 아직 열려 있지 않습니다.
+회원이 직접 하는 예약은 서버 함수(ook_class)로 처리하고, 출석·결제도 같은 방식으로 추가할 예정입니다.
 
 ## 변경 이력
 
+### v0.4.0 — 2026-10-12
+
+- 수업 시간표 화면: 다가오는 수업을 날짜별로 표시, 남은 자리 실시간 반영
+- 수업 예약·취소. 정원이 차면 대기로 등록되고, 취소가 생기면 대기 1번이 자동 예약
+- 코치·관리자: 수업 추가(날짜·시간·종류·정원·매주 반복), 길게 눌러 삭제
+- DB: 예약 함수 `book_class`, `cancel_booking` (정원 확인을 서버 한 곳에서 처리, 회원은 유효한 회원권 필요)
+- Android 디버그 빌드 확인
 ### v0.3.0 — 2026-10-12
 
 - 센터 홈: 역할에 따라 회원 관리(코치·관리자), 센터 설정(관리자) 메뉴 표시
@@ -141,6 +148,6 @@ Android 앱 빌드에는 Android Studio(Android SDK), iOS 앱 빌드에는 Mac�
 
 ### 다음 버전 예정
 
-- 수업 시간표 관리(코치), 회원권 상품·판매
-- 수업 예약 함수(정원 확인, 대기), 출석 함수(앱·위치·키오스크 공통)
+- 회원권 상품·판매, 내 회원권 화면
+- 출석 함수(앱·위치·키오스크 공통), 키오스크 화면
 - 회원권 만료 알림(pg_cron), PortOne 테스트 결제
