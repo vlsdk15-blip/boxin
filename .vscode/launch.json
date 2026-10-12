@@ -13,6 +13,13 @@
       "request": "launch",
       "type": "dart",
       "toolArgs": ["--dart-define-from-file=.env"]
+    },
+    {
+      "name": "boxin (web, hosted Supabase)",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "edge",
+      "toolArgs": ["--dart-define-from-file=.env.production"]
     }
   ]
 }
