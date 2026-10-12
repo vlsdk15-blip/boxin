@@ -16,4 +16,9 @@ void main() {
       expect(toE164('010-1234'), isNull);
     });
   });
+
+  test('formatPhone groups domestic digits', () {
+    expect(formatPhone('01012345678'), '010-1234-5678');
+    expect(formatPhone('0111234567'), '011-123-4567');
+  });
 }

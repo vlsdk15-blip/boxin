@@ -6,7 +6,9 @@ import 'package:go_router/go_router.dart';
 import 'config/env.dart';
 import 'data/supabase.dart';
 import 'features/auth/login_screen.dart';
+import 'features/centers/center_settings_screen.dart';
 import 'features/centers/centers_screen.dart';
+import 'features/members/members_screen.dart';
 import 'features/home/home_screen.dart';
 import 'features/kiosk/kiosk_screen.dart';
 
@@ -28,6 +30,16 @@ final _routerProvider = Provider<GoRouter>((ref) {
         path: '/center/:centerId',
         builder: (context, state) =>
             HomeScreen(centerId: state.pathParameters['centerId']!),
+      ),
+      GoRoute(
+        path: '/center/:centerId/members',
+        builder: (context, state) =>
+            MembersScreen(centerId: state.pathParameters['centerId']!),
+      ),
+      GoRoute(
+        path: '/center/:centerId/settings',
+        builder: (context, state) =>
+            CenterSettingsScreen(centerId: state.pathParameters['centerId']!),
       ),
       // Opened in a browser on the center's tablet / PC; no app install needed.
       GoRoute(path: '/kiosk', builder: (context, state) => const KioskScreen()),

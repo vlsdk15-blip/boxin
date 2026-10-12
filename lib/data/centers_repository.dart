@@ -84,3 +84,121 @@ Future<String> createCenter({required String name, String? address}) async {
   });
   return id as String;
 }
+
+class CenterSettings {
+  const CenterSettings({
+    required this.id,
+    required this.name,
+    this.address,
+    this.latitude,
+    this.longitude,
+    required this.attendanceRadiusM,
+  });
+
+  final String id;
+  final String name;
+  final String? address;
+  final double? latitude;
+  final double? longitude;
+  final int attendanceRadiusM;
+
+  factory CenterSettings.fromJson(Map<String, dynamic> json) => CenterSettings(
+        id: json['id'] as String,
+        name: json['name'] as String,
+        address: json['address'] as String?,
+        latitude: (json['latitude'] as num?)?.toDouble(),
+        longitude: (json['longitude'] as num?)?.toDouble(),
+        attendanceRadiusM: json['attendance_radius_m'] as int,
+      );
+}
+
+final centerSettingsProvider =
+    FutureProvider.autoDispose.family<CenterSettings, String>((ref, centerId) async {
+  final row = await supabase
+      .from('centers')
+      .select('id, name, address, latitude, longitude, attendance_radius_m')
+      .eq('id', centerId)
+      .single();
+  return CenterSettings.fromJson(row);
+});
+
+/// Admin only (RLS). Throws when no row was updated.
+Future<void> updateCenter(
+  String centerId, {
+  required String name,
+  String? address,
+  double? latitude,
+  double? longitude,
+  required int attendanceRadiusM,
+}) async {
+  final rows = await supabase
+      .from('centers')
+      .update({
+        'name': name,
+        'address': address,
+        'latitude': latitude,
+        'longitude': longitude,
+        'attendance_radius_m': attendanceRadiusM,
+      })
+      .eq('id', centerId)
+      .select('id');
+  if (rows.isEmpty) throw StateError('center not updated');
+}
+
+class CenterMember {
+  const CenterMember({
+    required this.membershipId,
+    required this.name,
+    this.phone,
+    required this.role,
+    this.memberNo,
+    required this.usesApp,
+  });
+
+  final String membershipId;
+  final String name;
+  final String? phone;
+  final MemberRole role;
+  final String? memberNo;
+
+  /// False while the person was registered by a coach but has not signed up.
+  final bool usesApp;
+
+  factory CenterMember.fromJson(Map<String, dynamic> json) {
+    final profile = json['profiles'] as Map<String, dynamic>;
+    return CenterMember(
+      membershipId: json['id'] as String,
+      name: profile['name'] as String? ?? '',
+      phone: profile['phone'] as String?,
+      role: MemberRole.values.byName(json['role'] as String),
+      memberNo: json['member_no'] as String?,
+      usesApp: profile['user_id'] != null,
+    );
+  }
+}
+
+/// Coach / admin only (RLS): everyone in the center.
+final centerMembersProvider =
+    FutureProvider.autoDispose.family<List<CenterMember>, String>((ref, centerId) async {
+  final rows = await supabase
+      .from('memberships')
+      .select('id, role, member_no, profiles(name, phone, user_id)')
+      .eq('center_id', centerId)
+      .eq('is_active', true)
+      .order('created_at');
+  return rows.map(CenterMember.fromJson).toList();
+});
+
+/// Coach / admin registers a member by name + phone, before they install the app.
+Future<void> registerMember({
+  required String centerId,
+  required String name,
+  required String phone,
+  String? memberNo,
+}) =>
+    supabase.rpc('register_member', params: {
+      'p_center_id': centerId,
+      'p_name': name,
+      'p_phone': phone,
+      if (memberNo != null && memberNo.isNotEmpty) 'p_member_no': memberNo,
+    });

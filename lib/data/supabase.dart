@@ -23,3 +23,10 @@ String? toE164(String input) {
   if (!RegExp(r'^01[0-9]{8,9}$').hasMatch(digits)) return null;
   return '+82${digits.substring(1)}';
 }
+
+/// Formats stored domestic digits (01012345678) as 010-1234-5678.
+String formatPhone(String digits) {
+  if (digits.length < 10) return digits;
+  final tail = digits.length - 4;
+  return '${digits.substring(0, 3)}-${digits.substring(3, tail)}-${digits.substring(tail)}';
+}

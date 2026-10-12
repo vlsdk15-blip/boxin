@@ -3,7 +3,7 @@
 여러 크로스핏·하이록스 센터가 함께 쓰는 **출석·예약·회원권 관리 앱**입니다.
 Flutter 코드 하나로 iOS, Android, 웹(PC)에 동시에 내놓습니다.
 
-- 현재 버전: **v0.2.0** (전화번호 로그인, 센터 선택·생성)
+- 현재 버전: **v0.3.0** (센터 설정, 회원 관리)
 - 설계서: https://claude.ai/code/artifact/2aea7b9f-a71f-474e-a6f4-6095bec74ec6
 
 ## 사용자
@@ -36,7 +36,7 @@ lib/
   app.dart               라우터, 테마
   config/env.dart        빌드 시 주입되는 설정
   data/                  Supabase 조회·호출
-  features/              화면별 코드 (auth, centers, home, kiosk)
+  features/              화면별 코드 (auth, centers, members, home, kiosk)
 supabase/
   config.toml            로컬 개발용 Supabase 설정
   migrations/            DB 스키마 (SQL)
@@ -118,6 +118,12 @@ Android 앱 빌드에는 Android Studio(Android SDK), iOS 앱 빌드에는 Mac�
 
 ## 변경 이력
 
+### v0.3.0 — 2026-10-12
+
+- 센터 홈: 역할에 따라 회원 관리(코치·관리자), 센터 설정(관리자) 메뉴 표시
+- 센터 설정 화면: 이름, 주소, 위도·경도, 출석 반경
+- 회원 관리 화면: 회원 목록, 이름·전화번호로 회원 등록(앱 미가입 표시)
+- 실서버(Supabase)에 DB 스키마 적용, VS Code에 실서버 실행 항목 추가
 ### v0.2.0 — 2026-10-12
 
 - 전화번호 인증 로그인 화면, 로그인 여부에 따른 화면 이동
@@ -135,6 +141,6 @@ Android 앱 빌드에는 Android Studio(Android SDK), iOS 앱 빌드에는 Mac�
 
 ### 다음 버전 예정
 
-- 센터 설정(주소·좌표·출석 반경), 코치의 회원 등록 화면
+- 수업 시간표 관리(코치), 회원권 상품·판매
 - 수업 예약 함수(정원 확인, 대기), 출석 함수(앱·위치·키오스크 공통)
 - 회원권 만료 알림(pg_cron), PortOne 테스트 결제
