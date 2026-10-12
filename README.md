@@ -3,7 +3,7 @@
 여러 크로스핏·하이록스 센터가 함께 쓰는 **출석·예약·회원권 관리 앱**입니다.
 Flutter 코드 하나로 iOS, Android, 웹(PC)에 동시에 내놓습니다.
 
-- 현재 버전: **v0.1.0** (프로젝트 뼈대 + DB 스키마)
+- 현재 버전: **v0.2.0** (전화번호 로그인, 센터 선택·생성)
 - 설계서: https://claude.ai/code/artifact/2aea7b9f-a71f-474e-a6f4-6095bec74ec6
 
 ## 사용자
@@ -35,8 +35,10 @@ lib/
   main.dart              앱 시작점 (Supabase 초기화)
   app.dart               라우터, 테마
   config/env.dart        빌드 시 주입되는 설정
-  features/              화면별 코드 (home, kiosk, ...)
+  data/                  Supabase 조회·호출
+  features/              화면별 코드 (auth, centers, home, kiosk)
 supabase/
+  config.toml            로컬 개발용 Supabase 설정
   migrations/            DB 스키마 (SQL)
 test/
 ```
@@ -58,6 +60,18 @@ flutter pub get
 `.env` 파일이 없으면 실행이 실패하므로 아래 3번을 먼저 진행합니다.
 
 ### 3. Supabase 연결
+
+**로컬에서 개발할 때** (Docker Desktop 필요, 실제 문자는 발송되지 않음)
+
+```bash
+supabase start      # 로컬 Supabase 실행 + DB 스키마 적용
+supabase status     # API URL과 publishable key 확인 → .env 에 입력
+supabase stop       # 끝낼 때
+```
+
+로컬 테스트 로그인 번호는 `010-1111-0001`, `010-1111-0002`, `010-2222-0003`이고 인증번호는 모두 `123456`입니다(`supabase/config.toml`).
+
+**실제 서버에 연결할 때**
 
 1. https://supabase.com 에서 프로젝트 생성
 2. `.env.example`을 `.env`로 복사하고 Project URL과 anon key 입력 (`.env`는 커밋되지 않습니다)
@@ -104,6 +118,12 @@ Android 앱 빌드에는 Android Studio(Android SDK), iOS 앱 빌드에는 Mac�
 
 ## 변경 이력
 
+### v0.2.0 — 2026-10-12
+
+- 전화번호 인증 로그인 화면, 로그인 여부에 따른 화면 이동
+- 첫 로그인 시 이름 입력
+- 센터 선택 화면: 내가 속한 센터와 역할 표시, 센터 만들기(만든 사람이 관리자)
+- 로컬 개발용 Supabase 설정(`supabase/config.toml`)과 테스트 로그인 번호
 ### v0.1.0 — 2026-10-11
 
 - Flutter 프로젝트 뼈대 (`lib/`, 라우터, `/kiosk` 주소, Supabase 초기화)
@@ -115,6 +135,6 @@ Android 앱 빌드에는 Android Studio(Android SDK), iOS 앱 빌드에는 Mac�
 
 ### 다음 버전 예정
 
-- 로그인(전화번호 인증) → 센터 선택·설정
+- 센터 설정(주소·좌표·출석 반경), 코치의 회원 등록 화면
 - 수업 예약 함수(정원 확인, 대기), 출석 함수(앱·위치·키오스크 공통)
 - 회원권 만료 알림(pg_cron), PortOne 테스트 결제
